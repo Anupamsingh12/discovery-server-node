@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Registry</title>
+    <style>
+      /* Basic reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #181818;
+        color: #ddd;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 36px;
+        margin-bottom: 40px;
+        color: #fff;
+      }
+
+      /* Navigation Styles */
+      nav {
+        background-color: #333;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+      }
+
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        margin: 0 10px;
+        border-radius: 5px;
+      }
+
+      nav a:hover {
+        background-color: #924017;
+      }
+
+      .service-container {
+        background-color: #333;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .service-header {
+        font-size: 24px;
+        color: #fff;
+        background-color: #924017;
+        padding: 10px;
+        border-radius: 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #555;
+      }
+
+      th {
+        background-color: #222;
+        color: #fff;
+      }
+
+      tr:nth-child(even) {
+        background-color: #2c2c2c;
+      }
+
+      tr:hover {
+        background-color: #444;
+      }
+
+      td {
+        color: #bbb;
+      }
+
+      td:last-child {
+        color: #8bc34a; /* Green color for last heartbeat */
+      }
+
+      .service-instance {
+        margin-bottom: 10px;
+      }
+
+      .service-header span {
+        font-weight: normal;
+        font-size: 14px;
+        color: #ddd;
+      }
+
+      /* Add a small border-radius on hover */
+      .service-container:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        transform: scale(1.02);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation bar -->
+    <nav>
+      <a href="/docs">Docs</a>
+    </nav>
+
+    <h1>Service Registry</h1>
+
+    <% allServices.forEach(service => { %>
+    <div class="service-container">
+      <div class="service-header">
+        <strong><%= service.serviceName %></strong>
+        <span>Instances: <%= service.instances.length %></span>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Instance ID</th>
+            <th>Host</th>
+            <th>Last Heartbeat</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% service.instances.forEach((instance, index) => { %>
+          <tr>
+            <td>instance-<%= instance.instanceId %></td>
+            <td>
+              <%= instance.host + (instance.port ? ':' + instance.port : '') %>
+            </td>
+            <td><%= new Date(instance.lastHeartbeat).toLocaleString() %></td>
+            <td>UP</td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% }); %>
+  </body>
+</html>
