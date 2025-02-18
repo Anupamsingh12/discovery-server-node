@@ -1,25 +1,44 @@
-# API Gateway Service
+# Discovery Server Node
 
-This is an API Gateway service built using Express.js. It provides functionalities for service registration, deregistration, heartbeat updates, and service discovery.
+## Description
+
+The **Discovery Server Node** is a simple service registry and discovery tool built with Node.js. It allows services to register, deregister, update heartbeats, and discover other services in a distributed system. This server is essential for microservices architectures where services need to communicate with each other. The auto-discovery feature makes it easier for services to find and connect with one another without hardcoding their locations.
+
+## Features
+
+- **Service Registration**: Allows services to register themselves in the discovery server.
+- **Deregistration**: Allows services to deregister themselves when they are no longer active.
+- **Heartbeat Updates**: Services can periodically update their heartbeat to indicate they are still alive.
+- **Service Discovery**: Fetch the list of all registered services with their instances and statuses.
 
 ## Installation
 
-1. **Clone the repository:**
-   ```sh
-   git clone <repository-url>
+To get started with the Discovery Server Node, follow the steps below.
+
+### Prerequisites
+
+- Node.js (version 14.x or higher)
+- npm (Node Package Manager)
+
+### Steps
+
+1. **install the dependency:**
+
+   ```bash
+   npm i discovery-server-node
    ```
-2. **Navigate to the project directory:**
+
+2. **In your express app import the package and call:**
+
    ```sh
-   cd api-gateway
-   ```
-3. **Install the dependencies:**
-   ```sh
-   npm install
+    const ApiGateway = require("discovery-server-node");
+    const apiGateway = new ApiGateway();
+    apiGateway.start();
    ```
 
 ## Configuration
 
-Ensure you have a `config/config.js` file with the necessary configuration settings for the server, cache, and routes. The configuration file should export an object with the following structure:
+Ensure you have a `config/config.js` file with the necessary configuration settings for the server if You are using the github repo. The configuration file should export an object with the following structure:
 
 ```js
 module.exports = {
@@ -45,7 +64,7 @@ module.exports = {
 Start the server:
 
 ```sh
-node app.js
+node discovery.js
 ```
 
 ## API Endpoints
