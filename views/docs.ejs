@@ -1,4 +1,3 @@
-<!-- views/userGuide.ejs -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -115,8 +114,8 @@
     <header>
       <h1>Service Registry User Guide</h1>
       <p>
-        Your one-stop guide for understanding and using the Service Registry in
-        your project.
+        Your one-stop guide for understanding and using the Discovery Server
+        Node in your project.
       </p>
     </header>
 
@@ -125,84 +124,79 @@
       <div class="section">
         <h2>1. Introduction</h2>
         <p>
-          The Service Registry is a centralized place to manage your services in
-          a distributed system. It allows microservices to register themselves,
-          send heartbeats, and update their status in the registry. This makes
-          it easier to discover, track, and manage services dynamically.
+          The **Discovery Server Node** is a centralized service registry that
+          allows services to register, deregister, update their heartbeats, and
+          discover other services in a distributed system. It is essential for
+          microservice architectures where services need to dynamically find and
+          communicate with each other.
         </p>
         <p>
-          This registry can be used to register service instances with their
-          respective IPs, ports, and other metadata, ensuring that you can
-          always reach a valid service instance even as instances scale up or
-          down.
+          This guide will walk you through setting up and using the Discovery
+          Server Node, including registering services, heartbeats, and service
+          discovery.
         </p>
       </div>
 
       <!-- Section 2: Installation and Setup -->
       <div class="section">
         <h2>2. Installation and Setup</h2>
+        <h3>Step 1: Install the Discovery Server Node Package</h3>
+        <p>Install the package for the Discovery Server:</p>
+        <pre>npm install discovery-server-node</pre>
 
-        <h3>Step 1: Install Required Dependencies</h3>
-        <p>To get started, install the necessary dependencies:</p>
-        <pre>npm install express node-cache dotenv</pre>
-
-        <h3>Step 2: Set Up Your Environment Configuration</h3>
+        <h3>Step 2: Start the Discovery Server</h3>
         <p>
-          Create a `.env` file in the root directory of your project and set the
-          following environment variables:
+          In your Express app, import the package and start the Discovery
+          Server:
         </p>
         <pre>
-PORT=3001
-CACHE_TTL=86400  # TTL in seconds (default is 24 hours)
-      </pre
-        >
+const { DiscoveryServer } = require("discovery-server-node");
+const discovery = new DiscoveryServer();
+discovery.start();
+        </pre>
 
-        <h3>Step 3: Configure Your Application</h3>
-        <p>Configure your app in the `app.js` file:</p>
+        <h3>Step 3: Register a Service</h3>
+        <p>To register a service instance with the Discovery Server:</p>
         <pre>
-const express = require('express');
-const NodeCache = require('node-cache');
-const dotenv = require('dotenv');
-dotenv.config();
+const { ServiceRegistory } = require("discovery-server-node");
 
-// Initialize express and service registry cache
+const express = require("express");
 const app = express();
-const port = process.env.PORT || 3001;
-const cacheTTL = process.env.CACHE_TTL || 86400;
-const serviceRegistry = new NodeCache({ stdTTL: cacheTTL });
+const discoveryServerUrl = "http://localhost:4439"; // Discovery server URL
+const serviceName = "USER_SERVICE";  // Service name
+const port = 4000;
 
-// Define your routes...
-      </pre
-        >
+const userService = new ServiceRegistory(app, port, discoveryServerUrl, serviceName);
+app.listen(port, () => {
+  console.log(`App is running on http://localhost:${port}`);
+});
+        </pre>
       </div>
 
       <!-- Section 3: API Routes -->
       <div class="section">
-        <h2>3. API Routes</h2>
-        <p>
-          The service registry exposes the following API routes for managing
-          service instances:
-        </p>
+        <h2>3. API Endpoints</h2>
+        <p>The Discovery Server exposes the following API endpoints:</p>
         <ul>
           <li>
             <strong>GET /services</strong>: Fetches the list of all registered
             services and their instances.
           </li>
           <li>
-            <strong>POST /register/:serviceName</strong>: Registers a new
-            service instance with details like `host`, `port`, and `instanceId`.
+            <strong>POST /registerService</strong>: Registers a new service
+            instance.
           </li>
           <li>
-            <strong>POST /deregister/:serviceName/:instanceId</strong>:
-            Deregisters a specific service instance using its `instanceId`.
+            <strong>POST /deregisterService</strong>: Deregisters a specific
+            service instance.
           </li>
           <li>
-            <strong>POST /heartbeat/:serviceName/:instanceId</strong>: Updates
-            the heartbeat of a registered service instance.
+            <strong>POST /heartbeat</strong>: Updates the heartbeat of a service
+            instance.
           </li>
           <li>
-            <strong>GET /health</strong>: Health check endpoint to verify the
-            registry is running.
+            <strong>GET /healthCheck</strong>: Health check endpoint to verify
+            the service is running.
           </li>
         </ul>
 
@@ -210,26 +204,28 @@ const serviceRegistry = new NodeCache({ stdTTL: cacheTTL });
         <div class="example">
           <h4>Register a Service:</h4>
           <pre>
-POST /register/my-service
+POST /registerService
 {
-  "host": "127.0.0.1",
-  "port": "8080",
-  "instanceId": "instance-001"
+  "serviceName": "exampleService",
+  "host": "localhost",
+  "port": 3000,
+  "instanceId": "1"
 }
-        </pre
-          >
+          </pre>
 
           <h4>Heartbeat Update:</h4>
           <pre>
-POST /heartbeat/my-service/instance-001
-        </pre
-          >
+POST /heartbeat
+{
+  "serviceName": "exampleService",
+  "instanceId": "1"
+}
+          </pre>
 
           <h4>View Registered Services:</h4>
           <pre>
 GET /services
-        </pre
-          >
+          </pre>
         </div>
       </div>
 
@@ -237,9 +233,9 @@ GET /services
       <div class="section">
         <h2>4. Configuration</h2>
         <p>
-          Configuration for the service registry is stored in the
-          `config/config.js` file. Here you can modify the server settings,
-          cache TTL, paths, and routes.
+          The configuration for the Discovery Server is stored in the
+          `discovery-server-node` installation. You can modify settings like
+          server port, TTL (time-to-live), and more in the configuration file.
         </p>
 
         <h3>Example Configuration:</h3>
@@ -249,48 +245,37 @@ module.exports = {
     port: process.env.PORT || 3001,
   },
   cache: {
-    ttl: process.env.CACHE_TTL || 86400,
-  },
-  paths: {
-    viewsFolder: "views",
+    ttl: process.env.CACHE_TTL || 86400,  // Default TTL in seconds
   },
   routes: {
     services: "/services",
-    registerService: "/register/:serviceName",
-    deregisterService: "/deregister/:serviceName/:instanceId",
-    heartbeat: "/heartbeat/:serviceName/:instanceId",
-    healthCheck: "/health",
+    registerService: "/registerService",
+    deregisterService: "/deregisterService",
+    heartbeat: "/heartbeat",
+    healthCheck: "/healthCheck",
   },
 };
-      </pre
-        >
-
-        <div class="note">
-          <strong>Note:</strong> You can modify the routes directly in the
-          configuration file if necessary. Ensure that new routes do not
-          conflict with existing ones in your application.
-        </div>
+        </pre>
       </div>
 
-      <!-- Section 5: Usage in Existing Project -->
+      <!-- Section 5: Usage in an Existing Project -->
       <div class="section">
         <h2>5. Usage in an Existing Project</h2>
-        <p>To integrate the service registry into an existing project:</p>
+        <p>
+          To integrate the Discovery Server Node into your existing project:
+        </p>
         <ol>
           <li>
-            Install the necessary dependencies:
-            <code>npm install express node-cache dotenv</code>.
+            Install the required dependencies:
+            <code>npm install discovery-server-node</code>.
           </li>
           <li>
-            Copy the `config/config.js` and `app.js` files into your project.
+            Configure the server and routes as shown above in your `app.js`
+            file.
           </li>
           <li>
-            Modify the configuration as needed (e.g., port number, TTL, routes).
-          </li>
-          <li>Run your application using <code>node app.js</code>.</li>
-          <li>
-            Start using the registry API to register services, update
-            heartbeats, and manage your services dynamically.
+            Use the service registry API to register services, update
+            heartbeats, and manage your service instances.
           </li>
         </ol>
       </div>

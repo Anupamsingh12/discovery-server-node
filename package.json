@@ -1,14 +1,16 @@
 {
   "name": "discovery-server-node",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A service discovery module for Express apps",
   "main": "discovery.js",
   "scripts": {
     "start": "node discovery.js"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "dotenv": "^10.0.0",
     "easy-discovery-server": "^1.0.0",
+    "ejs": "^3.1.10",
     "express": "^4.17.1",
     "node-cache": "^5.1.2"
   },

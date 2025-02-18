@@ -2,8 +2,8 @@ const express = require("express");
 const config = require("./config/config");
 const NodeCache = require("node-cache");
 const path = require("path");
-
-class ApiGateway {
+const ServiceRegistry = require("./registory");
+class DiscoveryServer {
   constructor() {
     this.app = express();
     this.config = config;
@@ -163,4 +163,4 @@ class ApiGateway {
   }
 }
 
-module.exports = ApiGateway;
+module.exports = { DiscoveryServer, ServiceRegistry };

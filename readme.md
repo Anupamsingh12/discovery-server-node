@@ -20,7 +20,7 @@ To get started with the Discovery Server Node, follow the steps below.
 - Node.js (version 14.x or higher)
 - npm (Node Package Manager)
 
-### Steps
+### Steps for Discovery Server
 
 1. **Install the dependency:**
 
@@ -28,12 +28,43 @@ To get started with the Discovery Server Node, follow the steps below.
    npm install discovery-server-node
    ```
 
-2. **In your Express app, import the package and start the server:**
+2. **In your Express app, import the package and start the Discovery server:**
 
    ```js
-   const ApiGateway = require("discovery-server-node");
-   const apiGateway = new ApiGateway();
-   apiGateway.start();
+   const { DiscoveryServer } = require("discovery-server-node");
+   const discovery = new DiscoveryServer();
+   discovery.start();
+   ```
+
+### Steps for Registry of service.
+
+1. **Install the dependency:**
+
+   ```bash
+   npm install discovery-server-node
+   ```
+
+2. **In your Express app, register the current app to auto discovery pass the app instance:**
+
+   ```js
+   const { ServiceRegistry } = require("discovery-server-node");
+
+   const express = require("express");
+
+   const app = express();
+   const discoveryServerUrl = "http://localhost:4439"; // discovery server Url and Make Sure Your server is running
+   const serviceName = "USER_SERVICE"; // this will be same for new instance of same app..
+   const port = 4000;
+
+   const userService = new ServiceRegistry(
+     app,
+     port,
+     discoveryServerUrl,
+     serviceName
+   );
+   app.listen(port, () => {
+     console.log(`App is running on http://localhost:${port}`);
+   });
    ```
 
 ## Configuration
@@ -204,8 +235,10 @@ For any questions or support, please contact [anupmsingh12@gmail.com](mailto:anu
 ## Future Work
 
 - Optimize data structures.
-- implement real time update for the services and explicit status.
--
+- Implement real time update for the services and explicit status.
+- Implement auto-scaling support for service instances.
+- Improve security with API token authentication.
+- Integrate a more advanced heartbeat mechanism.
 
 ## Support
 
