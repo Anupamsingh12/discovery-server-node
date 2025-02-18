@@ -1,6 +1,6 @@
 {
   "name": "discovery-server-node",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A service discovery module for Express apps",
   "main": "discovery.js",
   "scripts": {
