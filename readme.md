@@ -2,14 +2,14 @@
 
 ## Description
 
-The **Discovery Server Node** is a simple service registry and discovery tool built with Node.js. It allows services to register, deregister, update heartbeats, and discover other services in a distributed system. This server is essential for microservices architectures where services need to communicate with each other. The auto-discovery feature makes it easier for services to find and connect with one another without hardcoding their locations.
+The **Discovery Server Node** is a service registry and discovery tool built with Node.js. It allows services to register, deregister, update heartbeats, and discover other services in a distributed system. This server is essential for microservices architectures where services need to communicate with each other. The auto-discovery feature simplifies the process for services to find and connect with one another without hardcoding their locations.
 
 ## Features
 
-- **Service Registration**: Allows services to register themselves in the discovery server.
+- **Service Registration**: Enables services to register themselves in the discovery server.
 - **Deregistration**: Allows services to deregister themselves when they are no longer active.
 - **Heartbeat Updates**: Services can periodically update their heartbeat to indicate they are still alive.
-- **Service Discovery**: Fetch the list of all registered services with their instances and statuses.
+- **Service Discovery**: Fetches the list of all registered services with their instances and statuses.
 
 ## Installation
 
@@ -22,42 +22,23 @@ To get started with the Discovery Server Node, follow the steps below.
 
 ### Steps
 
-1. **install the dependency:**
+1. **Install the dependency:**
 
    ```bash
-   npm i discovery-server-node
+   npm install discovery-server-node
    ```
 
-2. **In your express app import the package and call:**
+2. **In your Express app, import the package and start the server:**
 
-   ```sh
-    const ApiGateway = require("discovery-server-node");
-    const apiGateway = new ApiGateway();
-    apiGateway.start();
+   ```js
+   const ApiGateway = require("discovery-server-node");
+   const apiGateway = new ApiGateway();
+   apiGateway.start();
    ```
 
 ## Configuration
 
-Ensure you have a `config/config.js` file with the necessary configuration settings for the server if You are using the github repo. The configuration file should export an object with the following structure:
-
-```js
-module.exports = {
-  server: {
-    port: <port-number>
-  },
-  cache: {
-    ttl: <time-to-live>
-  },
-  routes: {
-    services: "/services",
-    registerService: "/registerService",
-    deregisterService: "/deregisterService",
-    heartbeat: "/heartbeat",
-    healthCheck: "/healthCheck",
-    docs: "/docs"
-  }
-};
-```
+Ensure you have a `discovery-server-node` installed.
 
 ## Usage
 
@@ -202,7 +183,7 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## Contact
 
-For any questions or support, please contact [your-email@example.com](mailto:your-email@example.com).
+For any questions or support, please contact [anupmsingh12@gmail.com](mailto:anupmsingh12@gmail.com).
 
 ## Acknowledgements
 
@@ -220,23 +201,19 @@ For any questions or support, please contact [your-email@example.com](mailto:you
 
 - Added health check and documentation endpoints.
 
-### v1.2.0
-
-- Improved error handling and logging.
-
 ## Future Work
 
-- Add authentication and authorization for API endpoints.
-- Implement rate limiting and request throttling.
-- Enhance the UI for the services page.
+- Optimize data structures.
+- implement real time update for the services and explicit status.
+-
 
 ## Support
 
-If you encounter any issues, please open an issue on the [GitHub repository](repository-url).
+If you encounter any issues, please contact [anupmsingh12@gmail.com](mailto:anupmsingh12@gmail.com).
 
 ## Author
 
-Developed by [Your Name](https://github.com/your-github-profile).
+Developed by Anupam Kumar.
 
 ## Disclaimer
 
